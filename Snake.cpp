@@ -2,13 +2,27 @@
 #include <cstdlib>
 
 
-void move(char c);
+void move(/*char c,*/ int y[], int x[], int l)
 {
+    mvaddch(y[l-1], x[l-1], ' ');
     if(c==KEY_LEFT)
     {
-        mvaddch((snakey[lenght]))
+        
     }
-}
+    if(c==KEY_RIGHT)
+    {
+        
+    }
+    if(c==KEY_DOWN)
+    {
+        
+    }
+    if(c==KEY_UP)
+    {
+        
+    }
+    
+};
 
 int main(){
     initscr();
@@ -29,13 +43,15 @@ int main(){
     snakey = (int*) malloc (length);
     
     for(int i=0; i<length; i++){
-        snakex[i]=COLS/2;
-        snakey[i]=LINES/2;
-        //mvaddch((snakey[i]+i), (snakex[i]+i), '0');
+        snakex[i]=COLS/2+i;
+        snakey[i]=LINES/2+i;
+        mvaddch((snakey[i]), (snakex[i]), '0');
     }
     refresh();
     getch();
-    
+    move(snakey, snakex, length);
+    refresh();
+    getch();
     free (snakey);
     free (snakex);
     
