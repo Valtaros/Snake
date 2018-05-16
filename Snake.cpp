@@ -1,27 +1,53 @@
 #include <ncurses.h>
-#include <cstdlib>
+//#include <cstdlib>
+#include <vector>
+using namespace std;
 
 
-void move(/*char c,*/ int y[], int x[], int l)
+class coordinate
 {
-    mvaddch(y[l-1], x[l-1], ' ');
-    if(c==KEY_LEFT)
+private:
+int x;
+int y;
+public:
+    int getx(){return x;};
+    int gety(){return y;};
+    void setx(int i){x=i;};
+    void sety(int i){y=i;};
+};
+
+
+void step(char c, vector<coordinate>& snake)
+{
+    mvaddch(snake[snake.size()-1].gety(), snake[snake.size()-1].getx(), ' ');
+    for(int i=snake.size()-2; i>=0; i--){
+        snake[i+1]=snake[i];
+    }
+    if(c=='l'/*KEY_LEFT*/)
+    {
+        snake[0].setx(snake[0].getx()-1);
+    }
+    if(c=='r'/*KEY_RIGHT*/)
+    {
+        snake[0].setx(snake[0].getx()+1);
+    }
+    if(c=='d'/*KEY_DOWN*/)
+    {
+        snake[0].sety(snake[0].gety()+1);
+    }
+    if(c=='u'/*KEY_UP*/)
+    {
+        snake[0].sety(snake[0].gety()-1);
+    }
+    mvaddch(snake[0].gety(), snake[0].getx(), 's');
+};
+
+void eat(coordinate food, coordinate head)
+{
+    if(head.getx()==food.getx() && head.gety() == food.gety())
     {
         
     }
-    if(c==KEY_RIGHT)
-    {
-        
-    }
-    if(c==KEY_DOWN)
-    {
-        
-    }
-    if(c==KEY_UP)
-    {
-        
-    }
-    
 };
 
 int main(){
@@ -35,25 +61,20 @@ int main(){
         mvaddch(i, COLS-1, 'x');
     }
     
-    int length=5, *snakex, *snakey, MaxX, MaxY;
+    int length=5, MaxX, MaxY;
     
     getmaxyx(stdscr, MaxY, MaxX);
     
-    snakex = (int*) malloc (length);
-    snakey = (int*) malloc (length);
+    coordinate head, food;
+    vector<coordinate> snake (5);
+    snake[0].setx(17);
+    snake[0].sety(20);
+    step('l', snake);
+    refresh();
+    getch();
     
-    for(int i=0; i<length; i++){
-        snakex[i]=COLS/2+i;
-        snakey[i]=LINES/2+i;
-        mvaddch((snakey[i]), (snakex[i]), '0');
-    }
-    refresh();
-    getch();
-    move(snakey, snakex, length);
-    refresh();
-    getch();
-    free (snakey);
-    free (snakex);
+    //mvprintw(10, 10, "%d", snake[0].getx()); 
+    
     
     endwin();
 }
